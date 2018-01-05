@@ -1,0 +1,2 @@
+# oschub
+SuperCollider lang extension
