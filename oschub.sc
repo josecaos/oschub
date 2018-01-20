@@ -1,7 +1,7 @@
 OSCHub {
 
-	classvar >instances;
-	var >instance;
+	classvar <instances;
+	var instance;
 
 	*new {
 
@@ -12,7 +12,6 @@ OSCHub {
 	connectTo {|id = "Default", ip = "127.0.0.1", port = 57120|
 
 		id = id.toLower;
-
 
 		// Asegura ID unico por instancia
 		if(instances.isNil, {
@@ -28,16 +27,18 @@ OSCHub {
 
 			},{
 
-				instances.add(id);//coloca el nombre
+				instances.add(id);//coloca el nombre en la lista
 
 				id = NetAddr.new(ip,port);
 
 				instance = id;
 
-				^"Conexión";
+				^("Conexión a ip:" + ip + " puerto:" + port);
 		});
 	}
 
+	// Falta la logica para enviar distintos tipos de mensaje +
+	// diferenciar entre mensaje y conjunto de mensajes
 	inputType {|type = 'audio'|
 		// type: audio,midi,custom
 

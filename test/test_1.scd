@@ -3,10 +3,18 @@ Platform.systemExtensionDir;
 //
 OSCHub;//OSCHub
 OSCHub.connectTo;
+//
 h = OSCHub.new;//an OSCHub
+i = OSCHub.new;//an OSCHub
+j = OSCHub.new;//an OSCHub
 h.connectTo;
+i.connectTo("Uno",port:57121);
+j.connectTo("Dos",port:57122);
+OSCHub.instances;
 h.inputType;
 
+OSCdef(\responde,{|msg,time,addr,recvPort|[msg,time,addr,recvPort].postcln},\audio);
+OSCdef.freeAll;
 
 
 //
@@ -19,6 +27,8 @@ OSCFunc.trace(true);
 NetAddr.langPort;
 NetAddr.localAddr;
 
+"PIZZA".toLower;
+"pizzzza".toUpper;
 //
 AbstractResponderFunc.allFuncProxies
 AbstractResponderFunc.allEnabled
