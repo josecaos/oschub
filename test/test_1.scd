@@ -18,8 +18,13 @@ OSCdef.freeAll;
 
 
 //
+s.boot;
 h = NetAddr("127.0.0.1",57120);
 h.sendMsg("/test",10000000);
+x = {SinOsc.ar(80,0,0.1)};
+x.play;
+s.scope
+h.sendMsg("/test",Amplitude.ar(x));
 OSCdef(\responde,{|msg,time,addr,recvPort|[msg,time,addr,recvPort].postcln},\test,h,57120);
 //
 OSCFunc.trace(true);
