@@ -37,6 +37,26 @@ OSCHub {
 		});
 	}
 
+	sendOSC {|tag, type ...args|
+
+		if(type == 'single' or: {type == 'bundle'},{
+
+			switch(type,
+				'single', {this.sendMsg(tag,args);^"Single"},
+				'bundle', {args.postcln;args.size.postcln;^"Bundle"}
+			);
+
+
+
+		},{
+
+			^"Solo usa las llaves \single ó \bundle en el argumento 'type'";
+
+		});
+
+
+	}
+
 	// Falta la logica para enviar distintos tipos de mensaje +
 	// diferenciar entre mensaje y conjunto de mensajes
 	inputType {|type = 'audio'|

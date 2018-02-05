@@ -1,17 +1,16 @@
 Platform.userExtensionDir;
 Platform.systemExtensionDir;
-//
-OSCHub;//OSCHub
-OSCHub.connectTo;
-//
-h = OSCHub.new;//an OSCHub
-i = OSCHub.new;//an OSCHub
-j = OSCHub.new;//an OSCHub
-h.connectTo;
-i.connectTo("Uno",port:57121);
-j.connectTo("Dos",port:57122);
+//clase
+OSCHub;
+//Instancia
+a = OSCHub.new;//an OSCHub
+b = OSCHub.new;//an OSCHub
+c = OSCHub.new;//an OSCHub
+a.connectTo;
+b.connectTo("Uno",port:57121);
+c.connectTo("Dos",port:57122);
 OSCHub.instances;
-h.inputType;
+a.inputType;
 
 OSCdef(\responde,{|msg,time,addr,recvPort|[msg,time,addr,recvPort].postcln},\audio);
 OSCdef.freeAll;
@@ -20,11 +19,14 @@ OSCdef.freeAll;
 //
 s.boot;
 h = NetAddr("127.0.0.1",57120);
-h.sendMsg("/test",10000000);
-x = {SinOsc.ar(80,0,0.1)};
+h.sendMsg("/test","Single Message");
+h.sendBundle(1e4,["/test","Bundle message","xxx"]);
+x = {SinOsc.ar(Amplitude.kr(Impulse.kr(2),0.01,0.01,80,120).poll)};
 x.play;
-s.scope
-h.sendMsg("/test",Amplitude.ar(x));
+s.scope;
+x.value;
+Amplitude.ar(Impulse.kr(2),0.01,0.01)
+h.sendMsg("/test",x.post);
 OSCdef(\responde,{|msg,time,addr,recvPort|[msg,time,addr,recvPort].postcln},\test,h,57120);
 //
 OSCFunc.trace(true);
@@ -40,3 +42,4 @@ AbstractResponderFunc.allEnabled
 OSCdef(\test).disable;
 OSCdef(\test).enable;
 AbstractResponderFunc.allDisabled
+//
