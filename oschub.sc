@@ -46,16 +46,15 @@ OSCHub {
 
 				'single', {
 					instance.sendMsg(tag,args[0]);
-					^("Mensaje simple:" + args[0])
+					^("Mensaje simple:" + tag + args[0])
 				},
 				'bundle', {
 					var list = [tag];
 					args.collect({|item|
-						list.add(item)
+						list = list.add(item)
 					});
 					instance.sendBundle(0.01,list);
-					^("Mensaje conjunto:" + list + args.size);
-
+					^("Mensaje conjunto:" + list.join(", \n ->"));
 				}
 			);
 
