@@ -11,6 +11,7 @@ OSCHub {
 
 	connectTo {|id = "Default", ip = "127.0.0.1", port = 57120|
 
+		var post = id;
 		id = id.toLower;
 
 		// Asegura ID unico por instancia
@@ -33,27 +34,36 @@ OSCHub {
 
 				instance = id;
 
-				^("Conexión a ip:" + ip + " puerto:" + port);
+				^("Instancia '" + post + "' conectada a ip:" + ip + ", puerto:" + port);
 		});
 	}
 
-	sendOSC {|tag, type ...args|
+	sendOSC {|type = 'single',tag ...args|
 
 		if(type == 'single' or: {type == 'bundle'},{
 
 			switch(type,
-				'single', {this.sendMsg(tag,args);^"Single"},
-				'bundle', {args.postcln;args.size.postcln;^"Bundle"}
+
+				'single', {
+					instance.sendMsg(tag,args[0]);
+					^("Mensaje simple:" + args[0])
+				},
+				'bundle', {
+					var list = [tag];
+					args.collect({|item|
+						list.add(item)
+					});
+					instance.sendBundle(0.01,list);
+					^("Mensaje conjunto:" + list + args.size);
+
+				}
 			);
 
+			},{
 
-
-		},{
-
-			^"Solo usa las llaves \single ó \bundle en el argumento 'type'";
+				^"Solo usa las llaves 'single' o 'bundle' en el argumento 'type'";
 
 		});
-
 
 	}
 
