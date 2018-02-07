@@ -1,7 +1,7 @@
 OSCHub {
 
 	classvar <instances;
-	var instance;
+	var <instance;
 
 	*new {
 
@@ -54,7 +54,7 @@ OSCHub {
 						list = list.add(item)
 					});
 					instance.sendBundle(0.01,list);
-					^("Mensaje conjunto:" + list.join(", \n ->"));
+					^("Mensaje conjunto:" + list.join(", \n -> "));
 				}
 			);
 
@@ -68,12 +68,12 @@ OSCHub {
 
 	// Falta la logica para enviar distintos tipos de mensaje +
 	// diferenciar entre mensaje y conjunto de mensajes
-	inputType {|type = 'audio'|
+	inputSignal {|signal = 'audio'|
 		// type: audio,midi,custom
 
-		if(type == 'audio' or: {type == 'midi'} or: {type == 'custom'}, {
+		if(signal == 'audio' or: {signal == 'midi'} or: {signal == 'custom'}, {
 
-			switch(type,
+			switch(signal,
 				\audio, {instance.sendMsg("/audio","Mensaje de amplitud");^"Audio".inform},
 				\midi, {instance.sendMsg("/midi","Mensaje MIDI");^"MIDI".inform},
 				\custom, {instance.sendMsg("/custom","Mensaje custom");^"Custom".inform},

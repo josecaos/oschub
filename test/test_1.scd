@@ -12,7 +12,7 @@ c.connectTo("Dos",port:57122);
 
 OSCdef(\test,{|msg,time,addr,recvPort,gate|play{CaosKick.ar(gate:msg[1])}},\test,h,57120);
 
-OSCdef(\test,{|msg,time,addr,recvPort,gate|msg.postcln},\test,h,57120);
+OSCdef(\test,{|msg,time,addr,recvPort,gate|msg.postcln},\test,a,57120);
 
 a.sendOSC(\single,\test,1);
 a.sendOSC(\bundle,\test,1,2,3,4,5,6,7,8,9,0);
