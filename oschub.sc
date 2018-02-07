@@ -1,7 +1,7 @@
 OSCHub {
 
 	classvar <instances;
-	var <instance;
+	var <instance, <trigSynth;
 
 	*new {
 
@@ -66,26 +66,39 @@ OSCHub {
 
 	}
 
-	// Falta la logica para enviar distintos tipos de mensaje +
-	// diferenciar entre mensaje y conjunto de mensajes
-	inputSignal {|signal = 'audio'|
-		// type: audio,midi,custom
+	inputSignal {|signal = 'audio',input, frames = 30|
 
 		if(signal == 'audio' or: {signal == 'midi'} or: {signal == 'custom'}, {
 
 			switch(signal,
-				\audio, {instance.sendMsg("/audio","Mensaje de amplitud");^"Audio".inform},
+				\audio, {
+
+					SynthDef(\amp,{SendTrig.kr(Impulse.kr(frames),0,Amplitude.kr(input))}).add;
+					//
+					OSCdef(\ampResponder,{|msg| /*instance.sendOSC(\single,\test,msg[3])*/msg[3].postcln},'/tr');
+					//
+					^"Synth cargado";
+
+				},
+
 				\midi, {instance.sendMsg("/midi","Mensaje MIDI");^"MIDI".inform},
 				\custom, {instance.sendMsg("/custom","Mensaje custom");^"Custom".inform},
 			);
 			}, {
 
-				^"Tipos de entrada: \audio, \midi, \custom";
+				^"Tipos de entrada, llaves: \audio, \midi o \custom";
 
 		});
 
 	}
 
+	loadTrig { ^trigSynth = Synth.newPaused(\amp) }
+
+	ampTrig {|pause = false|
+
+		^trigSynth.run(pause);
+
+	}
 
 
 }
