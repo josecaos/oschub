@@ -1,7 +1,7 @@
 OSCHub {
 
 	classvar <instances;
-	var <instance, <trigSynth;
+	var <instance, <trigSynth, <sendReply;
 
 	*new {
 
@@ -66,18 +66,24 @@ OSCHub {
 
 	}
 
-	inputSignal {|signal = 'audio',input, frames = 30|
+	triggerOSC {|signal = 'audio', frames = 30, inputFunc|
 
 		if(signal == 'audio' or: {signal == 'midi'} or: {signal == 'custom'}, {
 
 			switch(signal,
 				\audio, {
 
-					SynthDef(\amp,{SendTrig.kr(Impulse.kr(frames),0,Amplitude.kr(input))}).add;
-					//
-					OSCdef(\ampResponder,{|msg| /*instance.sendOSC(\single,\test,msg[3])*/msg[3].postcln},'/tr');
-					//
-					^"Synth cargado";
+					// sendReply = {SendTrig.kr(Impulse.kr(frames),1111,Amplitude.kr(inputFunc.value))};
+					sendReply = {SendReply.kr(Impulse.kr(frames),'/reply1',Amplitude.kr(inputFunc.value))};
+
+					OSCdef(\responder,{|msg| instance.sendMsg(signal,msg[3]);},'/reply1');
+					// OSCdef(\responder,{|msg| instance.sendOSC('single',signal,msg[3]);},'/reply1');
+
+					sendReply.play;
+
+					sendReply.stopTrigger(8);
+
+					^"Mensajes OSC ejecutandose";
 
 				},
 
@@ -92,13 +98,6 @@ OSCHub {
 
 	}
 
-	loadTrig { ^trigSynth = Synth.newPaused(\amp) }
-
-	ampTrig {|pause = false|
-
-		^trigSynth.run(pause);
-
-	}
-
+	stopTrigger {|rel = 0.01| ^sendReply.release(rel) }
 
 }
