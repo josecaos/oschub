@@ -3,13 +3,12 @@ s.boot;
 b = OSCHub.new;
 k = OSCHub.new;
 b.connectTo("eich","127.0.0.1");
-k.connectTo("cuatreoxs","192.168.0.1",57121);
+k.connectTo("cuatreoxs","127.0.0.1",57121);
 b.instance.ip;
-k.instance.ip;
+k.instance.port;
 
-b.inputSignal(\audio,SinOsc.ar([120,120.125],0,1),4);
-b.loadTrig;
-b.ampTrig(true);
+b.triggerOSC(\audio,12,{SinOsc.ar([120,120.5],0,1)});
+b.stopTrigger;
 
 OSCdef(\res,{|msg,time,addr,recvPort| [msg,time,addr,recvPort].postcln;},\test);
 OSCdef(\test1,{|msg,time,addr,recvPort| [msg,time,addr,recvPort].postcln;},\uno,port:57120);
@@ -19,6 +18,7 @@ b.sendOSC(\single,\uno,rrand(100,10000));
 k.sendOSC(\single,\dos,rrand(0,10));
 b.sendOSC(\bundle,\uno,10,2000,300);
 k.sendOSC(\bundle,\dos,1,2,3);
+//class
 OSCHub.instances
 
 

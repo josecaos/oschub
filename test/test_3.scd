@@ -10,8 +10,8 @@ x = OSCHub.new;
 OSCdef(\test,{|msg| ~test = msg[1].post},\audio);
 ~test.value.postcln;
 x.connectTo("amplitud");
-x.triggerOSC(\audio,32,{Pulse.ar(SinOsc.ar(2,0,60,120),0.1,LFNoise0.ar(4,0.01,1))});
-x.triggerOSC(\audio,16,{CaosKick.ar(att:0.15,gate:1)});
+x.triggerOSC(\audio,1,{Pulse.ar(SinOsc.ar(2,0,60,120),0.1,LFNoise0.ar(4,0.01,1))});
+x.triggerOSC(\audio,8,{CaosKick.ar(att:0.15,rel:0.1,gate:1)});
 x.stopTrigger;
 
 // OSCFunc.trace(false);

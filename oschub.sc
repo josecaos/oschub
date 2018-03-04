@@ -1,7 +1,7 @@
 OSCHub {
 
 	classvar <instances;
-	var <instance, <trigSynth, <sendReply;
+	var <instance, <trigSynth, <sendReply,<responder1;
 
 	*new {
 
@@ -75,12 +75,9 @@ OSCHub {
 
 					sendReply = {SendReply.kr(Impulse.kr(frames),'/reply1',Amplitude.kr(inputFunc.value))};
 
-					// OSCdef(\responder,{|msg| instance.sendMsg(signal,msg[3]);},'/reply1');
-					OSCdef(\responder,{|msg| this.sendOSC('single',signal,msg[3].postln)},'/reply1');
+					responder1 = OSCdef(\responder,{|msg| this.sendOSC('single',signal,msg[3].postln)},'/reply1');
 
 					sendReply.play;
-
-					// sendReply.stopTrigger;
 
 					^"Mensajes OSC ejecutandose";
 
@@ -97,6 +94,6 @@ OSCHub {
 
 	}
 
-	stopTrigger { ^sendReply.free }
+	stopTrigger { sendReply.free; ^responder1.free; }
 
 }
