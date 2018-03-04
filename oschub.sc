@@ -73,15 +73,14 @@ OSCHub {
 			switch(signal,
 				\audio, {
 
-					// sendReply = {SendTrig.kr(Impulse.kr(frames),1111,Amplitude.kr(inputFunc.value))};
 					sendReply = {SendReply.kr(Impulse.kr(frames),'/reply1',Amplitude.kr(inputFunc.value))};
 
-					OSCdef(\responder,{|msg| instance.sendMsg(signal,msg[3]);},'/reply1');
-					// OSCdef(\responder,{|msg| instance.sendOSC('single',signal,msg[3]);},'/reply1');
+					// OSCdef(\responder,{|msg| instance.sendMsg(signal,msg[3]);},'/reply1');
+					OSCdef(\responder,{|msg| this.sendOSC('single',signal,msg[3].postln)},'/reply1');
 
 					sendReply.play;
 
-					sendReply.stopTrigger(8);
+					// sendReply.stopTrigger;
 
 					^"Mensajes OSC ejecutandose";
 
@@ -98,6 +97,6 @@ OSCHub {
 
 	}
 
-	stopTrigger {|rel = 0.01| ^sendReply.release(rel) }
+	stopTrigger { ^sendReply.free }
 
 }
